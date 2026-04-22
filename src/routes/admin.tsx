@@ -157,14 +157,26 @@ function Admin() {
           </div>
         </div>
 
+        {/* Risk Heatmap */}
+        <div className="mb-8">
+          <RiskHeatmap />
+        </div>
+
         {/* Department table */}
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="rounded-xl border border-border bg-card overflow-hidden"
+        >
           <div className="p-6 border-b border-border flex items-center justify-between">
             <div>
               <h3 className="font-bold text-lg">Departmental Compliance</h3>
               <p className="text-sm text-muted-foreground">Training completion by team</p>
             </div>
-            <button className="text-sm text-primary font-medium hover:underline">Export CSV</button>
+            <button onClick={downloadReport} className="inline-flex items-center gap-1.5 text-sm text-primary font-medium hover:underline">
+              <Download className="w-3.5 h-3.5" /> Export CSV
+            </button>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -179,7 +191,7 @@ function Admin() {
               </thead>
               <tbody>
                 {departments.map((d) => (
-                  <tr key={d.name} className="border-t border-border hover:bg-secondary/30">
+                  <tr key={d.name} className="border-t border-border hover:bg-secondary/30 transition">
                     <td className="p-4 font-medium">{d.name}</td>
                     <td className="p-4 text-muted-foreground">{d.users}</td>
                     <td className="p-4">
@@ -203,8 +215,11 @@ function Admin() {
               </tbody>
             </table>
           </div>
-        </div>
+        </motion.div>
       </div>
+      </PageTransition>
+
+      <CertificateModal open={certOpen} onClose={() => setCertOpen(false)} />
     </div>
   );
 }
