@@ -1,11 +1,14 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { LayoutDashboard, BookOpen, Mail, Trophy, Shield, LogOut } from "lucide-react";
+import { LayoutDashboard, BookOpen, Mail, Trophy, Shield, LogOut, Search } from "lucide-react";
 import { ReactNode } from "react";
+import { AITutor } from "./AITutor";
+import { NotificationBell } from "./NotificationBell";
+import { PageTransition } from "./PageTransition";
 
 const nav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/courses", label: "Courses", icon: BookOpen },
-  { to: "/phishing", label: "Phishing Tests", icon: Mail },
+  { to: "/phishing", label: "Phishing Simulator", icon: Mail },
   { to: "/leaderboard", label: "Leaderboard", icon: Trophy },
 ];
 
@@ -19,7 +22,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             <div className="w-9 h-9 rounded-lg bg-gradient-cyber flex items-center justify-center shadow-glow">
               <Shield className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="font-display font-bold text-lg">CyberAware</span>
+            <span className="font-display font-bold text-lg tracking-tight">CyberAware</span>
           </Link>
         </div>
         <nav className="flex-1 p-4 space-y-1">
@@ -48,7 +51,22 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           </Link>
         </div>
       </aside>
-      <main className="flex-1 overflow-auto">{children}</main>
+      <main className="flex-1 overflow-auto flex flex-col">
+        <header className="h-14 border-b border-border px-6 flex items-center justify-between sticky top-0 bg-background/80 backdrop-blur-md z-30">
+          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary border border-border w-72">
+            <Search className="w-4 h-4 text-muted-foreground" />
+            <input className="bg-transparent outline-none text-sm flex-1" placeholder="Search courses, tests..." />
+          </div>
+          <div className="flex items-center gap-2 ml-auto">
+            <NotificationBell />
+            <div className="w-8 h-8 rounded-full bg-gradient-cyber flex items-center justify-center text-xs font-bold text-primary-foreground">AM</div>
+          </div>
+        </header>
+        <div className="flex-1">
+          <PageTransition>{children}</PageTransition>
+        </div>
+        <AITutor />
+      </main>
     </div>
   );
 }

@@ -1,6 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Shield, Users, TrendingDown, MousePointerClick, Award, Plus, Bell, Search } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from "recharts";
+import { Shield, Users, TrendingDown, MousePointerClick, Award, Plus, Search, Download, FileText } from "lucide-react";
+import { CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart, XAxis, YAxis } from "recharts";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { toast } from "sonner";
+import { NotificationBell } from "@/components/NotificationBell";
+import { RiskHeatmap } from "@/components/RiskHeatmap";
+import { CertificateModal } from "@/components/CertificateModal";
+import { PageTransition } from "@/components/PageTransition";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -31,6 +38,12 @@ const departments = [
 ];
 
 function Admin() {
+  const [certOpen, setCertOpen] = useState(false);
+
+  const downloadReport = () => {
+    toast.success("Report queued for download", { description: "Q1 2026 Compliance Report (PDF, 4.2 MB)" });
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
@@ -41,7 +54,7 @@ function Admin() {
               <div className="w-9 h-9 rounded-lg bg-gradient-hero flex items-center justify-center">
                 <Shield className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="font-display font-bold text-lg">CyberAware</span>
+              <span className="font-display font-bold text-lg tracking-tight">CyberAware</span>
             </Link>
             <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">Admin</span>
           </div>
@@ -50,22 +63,31 @@ function Admin() {
               <Search className="w-4 h-4 text-muted-foreground" />
               <input className="bg-transparent outline-none text-sm flex-1" placeholder="Search users, campaigns..." />
             </div>
-            <button className="p-2 rounded-lg hover:bg-secondary"><Bell className="w-4 h-4" /></button>
+            <NotificationBell />
             <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground">Employee view</Link>
             <div className="w-9 h-9 rounded-full bg-gradient-cyber flex items-center justify-center text-sm font-bold text-primary-foreground">JD</div>
           </div>
         </div>
       </header>
 
+      <PageTransition>
       <div className="p-8 max-w-7xl mx-auto">
         <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
           <div>
             <h1 className="text-3xl font-bold mb-1">Security Overview</h1>
             <p className="text-muted-foreground">Acme Corp · last 6 months</p>
           </div>
-          <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium hover:opacity-90 transition shadow-elegant">
-            <Plus className="w-4 h-4" /> Create Phishing Campaign
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <button onClick={downloadReport} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-card hover:bg-secondary text-sm font-medium transition">
+              <Download className="w-4 h-4" /> Download Report
+            </button>
+            <button onClick={() => setCertOpen(true)} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-primary/40 bg-primary/5 text-primary hover:bg-primary/10 text-sm font-medium transition">
+              <FileText className="w-4 h-4" /> Compliance Certificate
+            </button>
+            <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium hover:opacity-90 transition shadow-elegant">
+              <Plus className="w-4 h-4" /> Create Phishing Campaign
+            </button>
+          </div>
         </div>
 
         {/* KPIs */}
@@ -135,14 +157,26 @@ function Admin() {
           </div>
         </div>
 
+        {/* Risk Heatmap */}
+        <div className="mb-8">
+          <RiskHeatmap />
+        </div>
+
         {/* Department table */}
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="rounded-xl border border-border bg-card overflow-hidden"
+        >
           <div className="p-6 border-b border-border flex items-center justify-between">
             <div>
               <h3 className="font-bold text-lg">Departmental Compliance</h3>
               <p className="text-sm text-muted-foreground">Training completion by team</p>
             </div>
-            <button className="text-sm text-primary font-medium hover:underline">Export CSV</button>
+            <button onClick={downloadReport} className="inline-flex items-center gap-1.5 text-sm text-primary font-medium hover:underline">
+              <Download className="w-3.5 h-3.5" /> Export CSV
+            </button>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -157,7 +191,7 @@ function Admin() {
               </thead>
               <tbody>
                 {departments.map((d) => (
-                  <tr key={d.name} className="border-t border-border hover:bg-secondary/30">
+                  <tr key={d.name} className="border-t border-border hover:bg-secondary/30 transition">
                     <td className="p-4 font-medium">{d.name}</td>
                     <td className="p-4 text-muted-foreground">{d.users}</td>
                     <td className="p-4">
@@ -181,8 +215,11 @@ function Admin() {
               </tbody>
             </table>
           </div>
-        </div>
+        </motion.div>
       </div>
+      </PageTransition>
+
+      <CertificateModal open={certOpen} onClose={() => setCertOpen(false)} />
     </div>
   );
 }

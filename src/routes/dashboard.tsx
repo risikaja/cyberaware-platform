@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { Award, Zap, TrendingUp, Lock, CheckCircle2, PlayCircle, Trophy, Crown, Medal } from "lucide-react";
+import { Award, Zap, TrendingUp, Lock, CheckCircle2, PlayCircle, Trophy, Crown, Medal, Sparkles, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/dashboard")({
@@ -49,6 +49,47 @@ function Dashboard() {
           <StatCard icon={Zap} label="Total XP" value="3,870" sub="+250 this week" />
           <StatCard icon={TrendingUp} label="Overall Progress" value="68%" sub="On track for monthly goal" />
         </div>
+
+        {/* Smart Recommendations */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8 p-6 rounded-xl border border-primary/30 bg-gradient-to-br from-primary/10 via-card to-card relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 w-64 h-64 bg-cyber/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="relative">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-7 h-7 rounded-lg bg-gradient-cyber flex items-center justify-center shadow-glow">
+                <Sparkles className="w-4 h-4 text-primary-foreground" />
+              </div>
+              <span className="text-xs uppercase tracking-wider text-primary font-bold">AI-Powered · Smart Recommendations</span>
+            </div>
+            <h2 className="text-xl font-bold mb-1">Based on your last phishing simulation</h2>
+            <p className="text-sm text-muted-foreground mb-5">
+              You clicked a fake "IT Password Expiry" email. We've curated 3 modules to close that gap.
+            </p>
+            <div className="grid sm:grid-cols-3 gap-3">
+              {[
+                { title: "Spotting IT Impersonation", reason: "Closes your IT-spoof weakness", xp: 120 },
+                { title: "Password Safety Deep Dive", reason: "Recommended for credential attacks", xp: 180 },
+                { title: "Hover-Before-Click Habit", reason: "5-min micro-lesson", xp: 60 },
+              ].map((r) => (
+                <Link
+                  key={r.title}
+                  to="/course"
+                  className="group p-4 rounded-lg bg-card border border-border hover:border-primary hover:shadow-glow transition-all"
+                >
+                  <p className="text-xs text-cyber mb-1 font-medium">+{r.xp} XP</p>
+                  <p className="font-semibold text-sm mb-1.5 group-hover:text-primary transition">{r.title}</p>
+                  <p className="text-xs text-muted-foreground mb-3">{r.reason}</p>
+                  <span className="inline-flex items-center gap-1 text-xs text-primary font-medium">
+                    Start now <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Courses */}
@@ -124,8 +165,9 @@ function CourseCard({ course, index }: { course: typeof courses[0]; index: numbe
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06 }}
+      whileHover={!locked ? { y: -4, scale: 1.015 } : undefined}
       className={`p-5 rounded-xl border bg-card transition-all ${
-        locked ? "border-border opacity-60" : "border-border hover:border-primary/50 hover:shadow-glow"
+        locked ? "border-border opacity-60" : "border-border hover:border-primary/60 hover:shadow-glow"
       }`}
     >
       <div className="flex items-start justify-between mb-3">
