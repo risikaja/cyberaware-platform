@@ -165,8 +165,9 @@ function CourseCard({ course, index }: { course: typeof courses[0]; index: numbe
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06 }}
+      whileHover={!locked ? { y: -4, scale: 1.015 } : undefined}
       className={`p-5 rounded-xl border bg-card transition-all ${
-        locked ? "border-border opacity-60" : "border-border hover:border-primary/50 hover:shadow-glow"
+        locked ? "border-border opacity-60" : "border-border hover:border-primary/60 hover:shadow-glow"
       }`}
     >
       <div className="flex items-start justify-between mb-3">
