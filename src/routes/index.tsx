@@ -337,9 +337,4 @@ function Landing() {
       </footer>
     </div>
   );
-
-  function navClick(e: React.MouseEvent, id: string) {
-    e.preventDefault();
-    smoothScroll(id);
-  }
 }
