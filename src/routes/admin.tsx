@@ -19,6 +19,8 @@ export const Route = createFileRoute("/admin")({
   component: Admin,
 });
 
+export { Admin };
+
 const phishingData = [
   { month: "Oct", rate: 18.4 },
   { month: "Nov", rate: 14.2 },
