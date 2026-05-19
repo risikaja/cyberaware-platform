@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Shield, Mail, BookOpen, BarChart3, Lock, Zap, ArrowRight, CheckCircle2, Rocket, GraduationCap, LineChart, Menu, X } from "lucide-react";
 import { motion, useInView, useMotionValue, useTransform, animate } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { useAuth, initials } from "@/context/AuthContext";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -39,12 +41,14 @@ function smoothScroll(id: string) {
 
 function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user } = useAuth();
 
   const navClick = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     setMenuOpen(false);
     smoothScroll(id);
   };
+
 
   return (
     <div className="min-h-screen bg-background text-foreground scroll-smooth">
@@ -64,13 +68,26 @@ function Landing() {
             <a href="#for-employees" onClick={(e) => navClick(e, "for-employees")} className="hover:text-foreground transition-colors">For Employees</a>
           </nav>
           <div className="flex items-center gap-2">
-            <Link to="/signup" className="hidden md:inline-flex px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition shadow-elegant">
-              Get Started
-            </Link>
+            {user ? (
+              <Link to={user.role === "admin" ? "/admin/dashboard" : "/dashboard"} className="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-secondary text-sm font-medium hover:bg-secondary/70 transition">
+                <div className="w-7 h-7 rounded-full bg-gradient-cyber flex items-center justify-center text-[10px] font-bold text-primary-foreground">{initials(user.name)}</div>
+                <span>{user.name}</span>
+              </Link>
+            ) : (
+              <>
+                <Link to="/login" className="hidden md:inline-flex px-3 py-2 rounded-lg text-sm font-medium hover:bg-secondary transition">
+                  Sign in
+                </Link>
+                <Link to="/register" className="hidden md:inline-flex px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition shadow-elegant">
+                  Get Started
+                </Link>
+              </>
+            )}
             <button onClick={() => setMenuOpen((v) => !v)} className="md:hidden p-2 rounded-lg hover:bg-secondary" aria-label="Menu">
               {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
+
         </div>
         {menuOpen && (
           <div className="md:hidden border-t border-border bg-background">
