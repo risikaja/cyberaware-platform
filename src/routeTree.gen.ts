@@ -10,22 +10,35 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as RegisterRouteImport } from './routes/register'
 import { Route as PhishingRouteImport } from './routes/phishing'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CoursesRouteImport } from './routes/courses'
 import { Route as CourseRouteImport } from './routes/course'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PhishingRoute = PhishingRouteImport.update({
   id: '/phishing',
   path: '/phishing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LeaderboardRoute = LeaderboardRouteImport.update({
@@ -58,37 +71,51 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/course': typeof CourseRoute
   '/courses': typeof CoursesRoute
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/login': typeof LoginRoute
   '/phishing': typeof PhishingRoute
+  '/register': typeof RegisterRoute
   '/signup': typeof SignupRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/course': typeof CourseRoute
   '/courses': typeof CoursesRoute
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/login': typeof LoginRoute
   '/phishing': typeof PhishingRoute
+  '/register': typeof RegisterRoute
   '/signup': typeof SignupRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/course': typeof CourseRoute
   '/courses': typeof CoursesRoute
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/login': typeof LoginRoute
   '/phishing': typeof PhishingRoute
+  '/register': typeof RegisterRoute
   '/signup': typeof SignupRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -99,8 +126,11 @@ export interface FileRouteTypes {
     | '/courses'
     | '/dashboard'
     | '/leaderboard'
+    | '/login'
     | '/phishing'
+    | '/register'
     | '/signup'
+    | '/admin/dashboard'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -109,8 +139,11 @@ export interface FileRouteTypes {
     | '/courses'
     | '/dashboard'
     | '/leaderboard'
+    | '/login'
     | '/phishing'
+    | '/register'
     | '/signup'
+    | '/admin/dashboard'
   id:
     | '__root__'
     | '/'
@@ -119,18 +152,23 @@ export interface FileRouteTypes {
     | '/courses'
     | '/dashboard'
     | '/leaderboard'
+    | '/login'
     | '/phishing'
+    | '/register'
     | '/signup'
+    | '/admin/dashboard'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   CourseRoute: typeof CourseRoute
   CoursesRoute: typeof CoursesRoute
   DashboardRoute: typeof DashboardRoute
   LeaderboardRoute: typeof LeaderboardRoute
+  LoginRoute: typeof LoginRoute
   PhishingRoute: typeof PhishingRoute
+  RegisterRoute: typeof RegisterRoute
   SignupRoute: typeof SignupRoute
 }
 
@@ -143,11 +181,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/phishing': {
       id: '/phishing'
       path: '/phishing'
       fullPath: '/phishing'
       preLoaderRoute: typeof PhishingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/leaderboard': {
@@ -192,17 +244,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminDashboardRoute: typeof AdminDashboardRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminDashboardRoute: AdminDashboardRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   CourseRoute: CourseRoute,
   CoursesRoute: CoursesRoute,
   DashboardRoute: DashboardRoute,
   LeaderboardRoute: LeaderboardRoute,
+  LoginRoute: LoginRoute,
   PhishingRoute: PhishingRoute,
+  RegisterRoute: RegisterRoute,
   SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
