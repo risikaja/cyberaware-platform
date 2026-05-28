@@ -19,7 +19,8 @@ export const Route = createFileRoute("/admin")({
   component: Admin,
 });
 
-export { Admin };
+
+
 
 const phishingData = [
   { month: "Oct", rate: 18.4 },
@@ -39,7 +40,7 @@ const departments = [
   { name: "Operations", users: 156, completion: 84, score: "A-", risk: "Low" },
 ];
 
-function Admin() {
+export function Admin() {
   const [certOpen, setCertOpen] = useState(false);
 
   const downloadReport = () => {
@@ -240,3 +241,4 @@ function Kpi({ icon: Icon, label, value, trend, trendUp, accent }: { icon: any; 
     </div>
   );
 }
+

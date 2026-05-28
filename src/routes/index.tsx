@@ -108,46 +108,84 @@ function Landing() {
         )}
       </header>
 
-      {/* Hero */}
-      <section
-        className="relative overflow-hidden text-white"
-        style={{ background: "linear-gradient(135deg, #1a3a8f 0%, #0d47e8 100%)" }}
-      >
-        <div className="absolute inset-0 grid-bg opacity-40" />
-        <div className="relative max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-40">
+      {/* Hero — airy, bento-grid */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-mesh" />
+        <div className="absolute inset-0 dot-bg opacity-60" />
+        <div className="relative max-w-7xl mx-auto px-4 md:px-6 pt-16 md:pt-24 pb-20 md:pb-28">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="max-w-3xl"
+            className="max-w-3xl mx-auto text-center mb-12 md:mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm text-xs uppercase tracking-wider mb-6">
-              <Zap className="w-3 h-3" /> Trusted by 500+ enterprises
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-xs uppercase tracking-wider mb-6 text-foreground/70">
+              <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+              Trusted by 500+ enterprises
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-[1.05] mb-6">
-              Strengthen Your<br />
-              <span className="bg-gradient-to-r from-cyan-300 to-cyan-100 bg-clip-text text-transparent">
-                Human Firewall
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-[1.05] mb-6 tracking-tight">
+              Strengthen your{" "}
+              <span className="relative inline-block">
+                <span className="bg-gradient-to-r from-primary via-cyber to-primary bg-clip-text text-transparent">
+                  human firewall
+                </span>
+                <svg className="absolute -bottom-2 left-0 w-full" height="10" viewBox="0 0 200 10" fill="none" preserveAspectRatio="none">
+                  <path d="M2 7 Q 50 1 100 5 T 198 4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="text-primary/40" />
+                </svg>
               </span>
             </h1>
-            <p className="text-base md:text-xl text-white/80 mb-10 max-w-2xl">
+            <p className="text-base md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
               Train every employee to spot phishing, defend against social engineering, and stay
               ahead of evolving threats — through immersive, gamified learning.
             </p>
-            <div className="flex flex-wrap gap-3 md:gap-4">
-              <Link to="/signup" className="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg bg-white text-[#0d47e8] font-semibold hover:bg-white/90 transition shadow-elegant">
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Link to="/signup" className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition shadow-elegant">
                 Get Started <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link to="/admin" search={{ demo: "1" } as any} className="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg border border-white/30 text-white font-medium hover:bg-white/10 transition">
+              <Link to="/admin" search={{ demo: "1" } as any} className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl glass text-foreground font-medium hover:bg-card transition">
                 See Admin Demo
               </Link>
             </div>
-            <div className="mt-12 flex flex-wrap gap-6 text-sm text-white/70">
-              {["SOC 2 Compliant", "ISO 27001", "GDPR Ready"].map((t) => (
-                <div key={t} className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-300" /> {t}
-                </div>
-              ))}
+          </motion.div>
+
+          {/* Bento grid preview */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="grid grid-cols-6 grid-rows-2 gap-4 md:gap-5 max-w-5xl mx-auto"
+          >
+            <div className="col-span-6 md:col-span-4 row-span-2 rounded-2xl bg-card border border-border p-6 md:p-8 shadow-soft relative overflow-hidden group hover:shadow-elegant transition-all">
+              <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-primary/10 blur-3xl group-hover:bg-primary/20 transition" />
+              <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-primary font-semibold mb-3">
+                <Mail className="w-3.5 h-3.5" /> Phishing Simulator
+              </div>
+              <h3 className="text-2xl md:text-3xl font-bold mb-2">Real attacks. Safer team.</h3>
+              <p className="text-muted-foreground mb-6 text-sm md:text-base">Launch realistic email, SMS, and QR campaigns. Track click-rates by department in real time.</p>
+              <div className="space-y-2.5">
+                {[{ d: "Engineering", v: 92, c: "bg-success" }, { d: "Sales", v: 74, c: "bg-warning" }, { d: "Marketing", v: 58, c: "bg-primary" }].map((r) => (
+                  <div key={r.d} className="flex items-center gap-3">
+                    <span className="text-xs w-24 text-muted-foreground">{r.d}</span>
+                    <div className="flex-1 h-2 rounded-full bg-secondary overflow-hidden">
+                      <motion.div initial={{ width: 0 }} whileInView={{ width: `${r.v}%` }} viewport={{ once: true }} transition={{ duration: 1.2, delay: 0.3 }} className={`h-full ${r.c} rounded-full`} />
+                    </div>
+                    <span className="text-xs font-semibold w-8 text-right">{r.v}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="col-span-3 md:col-span-2 rounded-2xl bg-gradient-cyber p-6 text-primary-foreground shadow-soft relative overflow-hidden">
+              <Zap className="w-6 h-6 mb-3 opacity-80" />
+              <div className="text-4xl font-bold font-display mb-1">+340</div>
+              <div className="text-xs opacity-80">XP earned this week</div>
+            </div>
+            <div className="col-span-3 md:col-span-2 rounded-2xl bg-card border border-border p-6 shadow-soft">
+              <div className="flex items-center justify-between mb-3">
+                <BookOpen className="w-5 h-5 text-primary" />
+                <span className="text-[10px] uppercase tracking-wider text-success font-semibold">Live</span>
+              </div>
+              <div className="text-2xl font-bold mb-1">12 modules</div>
+              <div className="text-xs text-muted-foreground">Microlearning library</div>
             </div>
           </motion.div>
         </div>
@@ -157,13 +195,13 @@ function Landing() {
       <section id="features" className="py-20 md:py-32 scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="max-w-2xl mb-12 md:mb-16">
-            <p className="text-sm uppercase tracking-wider text-primary font-medium mb-3">Platform</p>
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">Everything your security team needs</h2>
+            <p className="text-sm uppercase tracking-wider text-primary font-semibold mb-3">Platform</p>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">Everything your security team needs</h2>
             <p className="text-base md:text-lg text-muted-foreground">
               From simulated attacks to compliance reports — built for modern security leaders.
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
             {[
               { icon: Mail, title: "Phishing Simulations", desc: "Launch realistic email, SMS, and QR-code campaigns. Track click-rates by department in real time." },
               { icon: BookOpen, title: "Interactive Modules", desc: "Bite-sized lessons with quizzes, scenarios, and gamified XP to keep employees engaged." },
@@ -175,7 +213,7 @@ function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group p-6 md:p-8 rounded-2xl bg-card border border-border hover:border-primary/50 hover:shadow-elegant transition-all"
+                className="group p-6 md:p-8 rounded-2xl bg-card border border-border hover:border-primary/40 hover:shadow-elegant hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="w-12 h-12 rounded-xl bg-gradient-cyber flex items-center justify-center mb-6 group-hover:shadow-glow transition-shadow">
                   <Icon className="w-6 h-6 text-primary-foreground" />
