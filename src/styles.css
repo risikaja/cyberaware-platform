@@ -180,12 +180,24 @@
 @layer utilities {
   .bg-gradient-hero { background-image: var(--gradient-hero); }
   .bg-gradient-cyber { background-image: var(--gradient-cyber); }
+  .bg-gradient-mesh { background-image: var(--gradient-mesh); }
   .shadow-elegant { box-shadow: var(--shadow-elegant); }
+  .shadow-soft { box-shadow: var(--shadow-soft); }
   .shadow-glow { box-shadow: var(--shadow-glow); }
   .grid-bg {
     background-image:
-      linear-gradient(oklch(0.7 0.18 195 / 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, oklch(0.7 0.18 195 / 0.08) 1px, transparent 1px);
+      linear-gradient(oklch(0.62 0.19 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, oklch(0.62 0.19 255 / 0.06) 1px, transparent 1px);
     background-size: 40px 40px;
+  }
+  .dot-bg {
+    background-image: radial-gradient(oklch(0.62 0.19 255 / 0.15) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .glass {
+    background: oklch(1 0 0 / 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid oklch(1 0 0 / 0.5);
   }
 }
