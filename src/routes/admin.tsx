@@ -40,7 +40,7 @@ const departments = [
   { name: "Operations", users: 156, completion: 84, score: "A-", risk: "Low" },
 ];
 
-function Admin() {
+export function Admin() {
   const [certOpen, setCertOpen] = useState(false);
 
   const downloadReport = () => {
@@ -242,4 +242,3 @@ function Kpi({ icon: Icon, label, value, trend, trendUp, accent }: { icon: any; 
   );
 }
 
-export { Admin };
