@@ -21,6 +21,20 @@ const baseLeaders = [
 ];
 
 function Leaderboard() {
+  const [bonus, setBonus] = useState(0);
+  useEffect(() => {
+    const update = () => setBonus(getBonusXP());
+    update();
+    window.addEventListener("cyberaware-xp-changed", update);
+    window.addEventListener("storage", update);
+    return () => {
+      window.removeEventListener("cyberaware-xp-changed", update);
+      window.removeEventListener("storage", update);
+    };
+  }, []);
+  const leaders = [...baseLeaders]
+    .map((l) => (l.you ? { ...l, xp: l.xp + bonus } : l))
+    .sort((a, b) => b.xp - a.xp);
   return (
     <DashboardLayout>
       <div className="p-8 max-w-4xl mx-auto">
