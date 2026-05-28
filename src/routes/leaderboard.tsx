@@ -1,13 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Crown, Medal, Trophy } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getBonusXP } from "@/lib/xp";
 
 export const Route = createFileRoute("/leaderboard")({
   head: () => ({ meta: [{ title: "Leaderboard — CyberAware" }, { name: "description", content: "Top security champions in your organization." }] }),
   component: Leaderboard,
 });
 
-const leaders = [
+const baseLeaders = [
   { name: "Sarah Chen", dept: "Engineering", xp: 4820 },
   { name: "Marcus Reid", dept: "Sales", xp: 4310 },
   { name: "You (Alex Morgan)", dept: "Marketing", xp: 3870, you: true },
@@ -19,6 +21,20 @@ const leaders = [
 ];
 
 function Leaderboard() {
+  const [bonus, setBonus] = useState(0);
+  useEffect(() => {
+    const update = () => setBonus(getBonusXP());
+    update();
+    window.addEventListener("cyberaware-xp-changed", update);
+    window.addEventListener("storage", update);
+    return () => {
+      window.removeEventListener("cyberaware-xp-changed", update);
+      window.removeEventListener("storage", update);
+    };
+  }, []);
+  const leaders = [...baseLeaders]
+    .map((l) => (l.you ? { ...l, xp: l.xp + bonus } : l))
+    .sort((a, b) => b.xp - a.xp);
   return (
     <DashboardLayout>
       <div className="p-8 max-w-4xl mx-auto">
