@@ -241,3 +241,5 @@ function Kpi({ icon: Icon, label, value, trend, trendUp, accent }: { icon: any; 
     </div>
   );
 }
+
+export { Admin };
